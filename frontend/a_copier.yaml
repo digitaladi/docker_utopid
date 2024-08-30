@@ -1,0 +1,57 @@
+#version du docker-compose
+#version: '3.8'
+services:
+  web:
+    container_name: serveur_front
+    #on build le dockerfile qui est à la racine 
+    build: .
+    #pour démarrer le serveur node
+    command: npm run start
+    #correspondre le port de machine et le port de docker
+    ports:
+      - "3000:3000" 
+
+  server_express:
+    #on build le dockerfile qui est dans le dossier serveur
+    build: ./server
+    container_name: express
+    env_file: ./server/.env
+    #pour démarrer le serveur node
+    command: npm run start
+    #correspondre le port de machine et le port de docker
+    ports:
+      - "4000:4000" 
+    volumes:
+      - ./server:/var/www
+    #on dit à container express de s'écuter après le container db
+    depends_on:
+      - db
+    environment:
+      #URL du db (dsn de connexion): mysql://usernameDeLaBaseDeDonnes:MotDePasseDeLaBaseDeDonnes@LeNomDeLimageMysql/DeLaBaseDeDonnes
+      DATABASE_URL: mysql://dbuser:dbpassword@db
+
+
+  db:
+    image: mysql:latest
+    restart: always  
+    environment:
+      MYSQL_DATABASE: 'utopid'
+      # Vous n'êtes donc pas obligé d'utiliser root, mais vous pouvez si vous le souhaitez
+      MYSQL_USER: 'dbuser'
+      # Vous pouvez utiliser le mot de passe de votre choix
+      MYSQL_PASSWORD: 'dbpassword'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'dbroot'
+    ports:
+      - '3306:3306'
+
+    volumes:
+      - ./server/mysql:/var/lib/mysql
+        
+ 
+
+
+
+      
+
+      

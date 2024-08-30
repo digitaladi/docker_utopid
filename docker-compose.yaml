@@ -1,0 +1,71 @@
+#version: '3.8'
+services:
+ # server:
+    #image: nginx:latest
+   # depends_on:
+   #   - backend
+    #  - frontend
+
+  #  restart: always
+  #  build:
+   #   dockerfile: Dockerfile
+    #  context: ./nginx
+   # ports:
+     # - "3000:80"
+
+
+  backend:
+    build:
+      #dockerfile: Dockerfile
+      context: "./backend"
+
+    env_file: ./backend/.env
+
+    volumes:
+      - /app/node_modules
+      - ./backend:/app  
+    depends_on:
+      - mysql_db
+    ports:
+      - 4000:4000
+
+    #env_file: ./server/.env
+
+
+
+
+  frontend:
+    stdin_open: true
+    build: 
+      #dockerfile: Dockerfile
+      context: ./frontend
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app  
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  mysql_db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'utopid'
+      # Vous n'êtes donc pas obligé d'utiliser root, mais vous pouvez si vous le souhaitez
+      MYSQL_USER: 'dbuser'
+      # Vous pouvez utiliser le mot de passe de votre choix
+      MYSQL_PASSWORD: 'dbpassword'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'dbroot'
+    ports:
+      - '3306:3306'
+
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+
+
+
+
+      
