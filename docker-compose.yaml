@@ -56,7 +56,8 @@ services:
   mysql_db:
     image: mysql:latest
     restart: always
-    env_file: ./backend/.env # on importe les variables d'environnement dans le container 
+    env_file: 
+      - ./backend/.env # on importe les variables d'environnement dans le container 
 
     ports:
       - '3306:3306'

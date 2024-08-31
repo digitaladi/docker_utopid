@@ -1,1 +1,2 @@
+#permet de ne pas transférer le dossier node_modules dans le container
 **/node_modules
