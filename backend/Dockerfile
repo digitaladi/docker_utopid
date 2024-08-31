@@ -1,3 +1,11 @@
+#FROM nginx:latest
+
+#COPY ./default.conf /etc/nginx/conf.d/default.conf
+
+
+#EXPOSE 4000
+
+
 #image node
 FROM node:22.7
 
@@ -26,7 +34,7 @@ COPY . .
 CMD [ "npm", "start", "dev", "run"]
 
 #tu écoute le port 3001
-EXPOSE 4000
+#EXPOSE 4000
 
 
 
